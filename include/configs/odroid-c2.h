@@ -46,6 +46,13 @@
 #define CONFIG_SYS_LONGHELP
 #define CONFIG_CMDLINE_EDITING
 
+#ifdef CONFIG_DM_MMC
+#define CONFIG_MMC
+#define CONFIG_GENERIC_MMC
+#define CONFIG_MMC_MESON
+#define CONFIG_MMC_MESON_SD_PORT	1
+#endif
+
 #include <config_distro_defaults.h>
 
 #endif /* __CONFIG_H */

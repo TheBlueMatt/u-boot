@@ -8,6 +8,7 @@
 #include <asm/io.h>
 #include <asm/arch/gxbb.h>
 #include <asm/arch/sm.h>
+#include <asm/arch/sd_emmc.h>
 #include <dm/platdata.h>
 #include <phy.h>
 
@@ -65,3 +66,44 @@ int misc_init_r(void)
 
 	return 0;
 }
+
+#ifdef CONFIG_GENERIC_MMC
+
+static const struct meson_mmc_platdata gxbb_sd_platdata[] = {
+	{ .sd_emmc_reg = (struct meson_mmc_regs *)SD_EMMC_BASE_A },
+	{ .sd_emmc_reg = (struct meson_mmc_regs *)SD_EMMC_BASE_B },
+	{ .sd_emmc_reg = (struct meson_mmc_regs *)SD_EMMC_BASE_C },
+};
+
+U_BOOT_DEVICE(meson_mmc) = {
+	.name = "meson_mmc",
+	.platdata = &gxbb_sd_platdata[CONFIG_MMC_MESON_SD_PORT],
+};
+
+static void meson_mmc_pinmux_setup(unsigned int port)
+{
+	switch (port) {
+	case SDIO_PORT_A:
+		setbits_le32(GXBB_PINMUX(8), 0x3f);
+		break;
+	case SDIO_PORT_B:
+		setbits_le32(GXBB_PINMUX(2), 0x3f << 10);
+		break;
+	case SDIO_PORT_C:
+		clrbits_le32(GXBB_PINMUX(2), 0x1f << 22);
+		setbits_le32(GXBB_PINMUX(4), (0x3 << 18) | (3 << 30));
+		break;
+	default:
+		printf("meson: invalid MMC port %d for pinmux setup\n", port);
+		break;
+	}
+}
+
+int board_mmc_init(bd_t *bis)
+{
+	meson_mmc_pinmux_setup(CONFIG_MMC_MESON_SD_PORT);
+
+	return 0;
+}
+
+#endif
