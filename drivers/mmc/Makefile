@@ -27,6 +27,7 @@ obj-$(CONFIG_FTSDC021) += ftsdc021_sdhci.o
 obj-$(CONFIG_GENERIC_MMC) += mmc.o
 obj-$(CONFIG_GENERIC_ATMEL_MCI) += gen_atmel_mci.o
 obj-$(CONFIG_KONA_SDHCI) += kona_sdhci.o
+obj-$(CONFIG_MMC_MESON) += meson_mmc.o
 obj-$(CONFIG_MMC_SPI) += mmc_spi.o
 obj-$(CONFIG_MMC_SUNXI) += sunxi_mmc.o
 obj-$(CONFIG_MV_SDHCI) += mv_sdhci.o
