@@ -285,6 +285,7 @@ static int meson_mmc_probe(struct udevice *dev)
 	mmc = mmc_create(cfg, pdata);
 	if (!mmc)
 		return -ENOMEM;
+	mmc->dev = dev;
 
 	upriv->mmc = mmc;
 	return 0;
